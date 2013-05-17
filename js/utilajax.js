@@ -20,9 +20,7 @@ var utilajax = {
 		xhr.addEventListener('readystatechange', function(e) {
 			if(xhr.readyState === 4) {
 				if (xhr.status === 200) {  	//通信処理が終わったとき
-					alert("ok");					
 					var res = JSON.parse(xhr.responseText); 		//JSONだった場合。
-					
 					console.log(res);
 					callback(res);
 				}

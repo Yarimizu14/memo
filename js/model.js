@@ -1,5 +1,8 @@
 (function(w) {
 
+/*
+*	Memo
+*/
 var Memo = function() { 
 	this.id = null;
 	this.active = false;
@@ -11,14 +14,21 @@ var Memo = function() {
 	this.created  = null;
 	this.modified  = null;
 
-	//return this.init(arguments);
+	this.register = this.register.bind(this);
+	//return this.register(arguments);
 };
-Memo.prototype.init = function(data) {
-	this.title    = data[0];
-	this.contents = data[1];
-	this.category = data[2];
-	this.created  = new Date();
-	this.modified = new Date();
+Memo.prototype.init = function() {};
+Memo.prototype.register = function(dataList) {
+	var data = (dataList.length == undefined ||dataList.length === 0) ? dataList : dataList[0];
+
+	console.log(data);
+
+	this.id       = data["id"];
+	this.title    = data["title"];
+	this.contents = data["body"];
+	this.category = data["category"];
+	this.created  = data["created"];
+	this.modified = data["modified"];
 };
 
 /*****取得*****/
@@ -59,13 +69,33 @@ Memo.prototype.changeCategory = function(data) {
 	this.modified = new Date();
 };
 
-var MemoHolder = function() { 
-	this.list = [];
+/*
+*	Holder
+*/
+var Holder = function() { };
 
-	console.log(arguments);
-	return this.init(arguments);
+/*
+*	MemoHolder
+*/
+var MemoHolder = function() { 
+	this.memos = [];
+
+	this.register = this.register.bind(this);
+	//return this.init(arguments);
 };
+MemoHolder.prototype = new Holder();
 MemoHolder.prototype.init = function() {
+};
+MemoHolder.prototype.register = function(dataList) {
+	console.log(dataList);
+
+	for(var i=0; i < dataList.length; i++) {
+		var m = new Memo();
+		m.register(dataList[i]);
+		this.memos.push(m);
+	};
+
+	console.log("holderに登録しました。");
 };
 MemoHolder.prototype.search = function(id) {
 };

@@ -81,8 +81,8 @@ li {
 <script type="text/javascript" >
 document.addEventListener("DOMContentLoaded", function() {
 
-	var memo = new Memo("タイトル", "内容", "カテゴリ");
-	console.log(MemoHolder);
+	//var memo = new Memo("タイトル", "内容", "カテゴリ");
+	var memo = new Memo();
 	var memoh = new MemoHolder("タイトル", "内容", "カテゴリ");
 /*
 	console.log(memo);
@@ -98,8 +98,19 @@ document.addEventListener("DOMContentLoaded", function() {
 	console.log(params);
 */
 
-	var data = utilajax.getAll(memo.init);
+/*
+	utilajax.getAll(memo.register);
 	console.log(memo);
+	setTimeout(function() {
+		console.log(memo);
+	}, 5000);
+*/
+
+	utilajax.getAll(memoh.register);	
+	console.log(memoh);	
+	setTimeout(function() {
+		console.log(memoh);
+	}, 5000);
 
 }, false);
 </script>
