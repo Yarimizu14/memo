@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+<meta charset="UTF-8">
+
+<style>
+
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	margin: 20px;
+}
+
+h3 {
+	margin-top: 30px;
+}
+
+li {
+	list-style: none;
+	margin-bottom: 10px;
+}
+
+.clearfix:after {
+  content: "."; 
+  display: block; 
+  height: 0; 
+  font-size:0;	
+  clear: both; 
+  visibility:hidden;
+}
+
+.each {
+}
+
+.each > *{
+
+	float : left;
+	height: 30px;
+	width: 100px;
+	margin-right: 10px;
+}
+
+.each > p{
+	line-height: 30px;
+	text-align: center;
+	background-color: #EEE;
+
+	width: 300px;
+}
+
+#control {
+	margin-top: 30px;
+}
+
+#control button {
+	height: 30px;
+	width: 100px;
+}
+
+/*************************/
+#model #finish {
+	width: 100px;
+	height: 30px;	
+}
+
+#model h6 {
+	margin-top: 6px;
+	background-color: #EEE;
+	width: 100px;
+	text-align: center;
+}
+
+</style>
+
+<script type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<h3>utilAjaxのテスト</h3>
+<br>
+<ul>
+	<li class="each clearfix">
+		<p class="title">メモタイトル</p>
+		<p class="contents">メモ内容</p>
+		<button class="edit">編集</button>
+		<button class="remove">メモ削除</button>
+	</li>
+	<li class="each clearfix">
+		<p class="title">メモタイトル</p>
+		<p class="contents">メモ内容</p>
+		<button class="edit">編集</button>
+		<button class="remove">メモ削除</button>
+	</li>
+</ul>
+
+<div id="control">
+	<button id="add">新規メモ作成</button>
+
+	<button id="get">サーバから取得</button>
+	<button id="store">サーバに保存</button>
+</div>
+
+<!--
+	model
+-->
+<div id="model">
+	<h3>Modelのテスト</h3>
+	<h6>status</h6>
+	<p id="status">なにもしてない</p>
+
+	<h6>タイトル</h6>
+	<input id="title" type="text" maxlength="20"><br>
+
+	<h6>内容</h6>
+	<textarea id="contents" cols="50" rows="10" value"aaa"></textarea>
+	<br>
+	<button id="finish">編集終了</button>
+</div>
+
+</body>
+
+</html>
