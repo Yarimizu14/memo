@@ -76,7 +76,33 @@ li {
 
 </style>
 
-<script type="text/javascript"></script>
+<script type="text/javascript" src="../js/model.js"></script>
+<script type="text/javascript" src="../js/utilajax.js"></script>
+<script type="text/javascript" >
+document.addEventListener("DOMContentLoaded", function() {
+
+	var memo = new Memo("タイトル", "内容", "カテゴリ");
+	console.log(MemoHolder);
+	var memoh = new MemoHolder("タイトル", "内容", "カテゴリ");
+/*
+	console.log(memo);
+	console.log(memo.getAll());
+
+	memo.changeTitle("hoge");
+	memo.changeContents("foo");
+	memo.changeCategory("hogegeho");
+
+	console.log(memo.getAll());
+
+	var params = utilajax.setParams({category: "hoge", title: "foo", body: "foofoo"});
+	console.log(params);
+*/
+
+	var data = utilajax.getAll(memo.init);
+	console.log(memo);
+
+}, false);
+</script>
 
 </head>
 
