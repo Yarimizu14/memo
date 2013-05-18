@@ -123,6 +123,18 @@ var appendBtn = function(parent, klass, text) {
 	return bTag;
 };
 
+var setPTag = function(holder) {
+	var pTagList = document.getElementsByTagName("p");
+	for(var i=0; i < pTagList.length; i++) {
+		pTagList[i].addEventListener("click", function() {
+			var value = this.innerText;
+			var result = holder.findByKey("category", value);
+			showAll(ajaxout, result); // => ここはクローじゃみたいな仕組みで動いている。
+		}, false);
+	};
+};
+
+
 function showAll(parent, obj) {
 	parent.innerHTML = "";
 
@@ -184,17 +196,32 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	/****************************************/
 
+	var clb = function(res) {
+		memoh.register(res);
+		showAll(ajaxout, memoh.list);
+		setPTag(memoh);
+	};
+
 	get.addEventListener("click", function() {
 		//ここ（コントローラ）でモデルとビューの動作をコールバックで指定する。
 		//bindする。
+		
+		/*
 		var callbacks = [];
-
 		callbacks.push(memoh.register);
 		utilajax.getAll(callbacks[0]);
+		showAll(ajaxout, memoh.list);
+		*/
 
-		showAll(ajaxout, memoh.memos);
+		//clbへの参照渡し？
+		utilajax.getAll(clb);
 
 	}, false);
+
+	var clb2 = function(res) {
+		utilajax.getAll(clb);
+		showAll(ajaxout, memoh.list);
+	};
 
 	add.addEventListener("click", function() {
 
@@ -209,7 +236,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			body : con.value
 		};
 
-		utilajax.create(data);
+		utilajax.create(data, clb2);
 
 	}, false);	
 

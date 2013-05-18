@@ -74,13 +74,44 @@ Memo.prototype.changeCategory = function(data) {
 /*
 *	Holder
 */
-var Holder = function() { };
+var Holder = function(id) {
+	this.list = [];
+};
+Holder.prototype.register = function() { throw new Error("実装が必要です。"); }
+Holder.prototype.findById = function(id) {
+	for(var i=0; i < this.list.length; i++) {
+		if(this.list[i].id === id) {
+			console.log(this.list[i]);
+			return this.list[i];
+		};
+	};
+	return false;
+};
+Holder.prototype.findByKey = function(key, value) {
+	var selection = [];
+
+	for(var i=0; i < this.list.length; i++) {
+		if(this.list[i][key] === value) {
+			selection.push(this.list[i]);
+		};
+	};
+	return selection;
+};
+//idで発見した値をkeyとvalueで書き換える
+Holder.prototype.editById = function(id, replace) {
+};
+Holder.prototype.editByKey = function(key, value, replace) {
+};
+Holder.prototype.deleteAll = function() {
+
+};
+
 
 /*
 *	MemoHolder
 */
 var MemoHolder = function() { 
-	this.memos = [];
+	this.list = [];
 
 	this.register = this.register.bind(this);
 	//return this.init(arguments);
@@ -92,19 +123,18 @@ MemoHolder.prototype.register = function(dataList) {
 
 	console.log("********holderに全件登録します。********");
 
-	this.memos = [];
+	this.list = [];
 
 	for(var i=0; i < dataList.length; i++) {
 		var m = new Memo();
 		m.register(dataList[i]);
-		this.memos.push(m);
+		this.list.push(m);
 	};
 
 	console.log("********holderに全件登録終了しました。********");
 
 };
-MemoHolder.prototype.search = function(id) {
-};
+
 
 w.Memo = Memo;
 w.MemoHolder = MemoHolder;
