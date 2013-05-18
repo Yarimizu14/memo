@@ -18,10 +18,12 @@ var Memo = function() {
 	//return this.register(arguments);
 };
 Memo.prototype.init = function() {};
-Memo.prototype.register = function(dataList) {
-	var data = (dataList.length == undefined ||dataList.length === 0) ? dataList : dataList[0];
+Memo.prototype.register = function(res) {
+	//引数resが配列ではない場合はそのまま、配列の場合は最初のデータをdataに入れる
+	var data = (res.length == undefined || res.length === 0) ? res : res[0];
 
-	console.log(data);
+	//console.log("*memoに１件登録します。*");
+	//console.log(data);
 
 	this.id       = data["id"];
 	this.title    = data["title"];
@@ -87,7 +89,10 @@ MemoHolder.prototype = new Holder();
 MemoHolder.prototype.init = function() {
 };
 MemoHolder.prototype.register = function(dataList) {
-	console.log(dataList);
+
+	console.log("********holderに全件登録します。********");
+
+	this.memos = [];
 
 	for(var i=0; i < dataList.length; i++) {
 		var m = new Memo();
@@ -95,7 +100,8 @@ MemoHolder.prototype.register = function(dataList) {
 		this.memos.push(m);
 	};
 
-	console.log("holderに登録しました。");
+	console.log("********holderに全件登録終了しました。********");
+
 };
 MemoHolder.prototype.search = function(id) {
 };

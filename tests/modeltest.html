@@ -37,19 +37,33 @@ li {
 }
 
 .each > *{
-
 	float : left;
 	height: 30px;
-	width: 100px;
 	margin-right: 10px;
-}
 
-.each > p{
 	line-height: 30px;
 	text-align: center;
 	background-color: #EEE;
+}
 
-	width: 300px;
+.each > .id {
+	width: 30px;
+}
+
+.each > .title {
+	width: 150px;
+}
+
+.each > .category {
+	width: 150px;
+}
+
+.each > .contents {
+	width: 200px;
+}
+
+.each > button {
+	width: 70px;
 }
 
 #control {
@@ -79,40 +93,133 @@ li {
 <script type="text/javascript" src="../js/model.js"></script>
 <script type="text/javascript" src="../js/utilajax.js"></script>
 <script type="text/javascript" >
+
+(function(w) {
+
+var appendLi = function(parent, klass, text) {
+	var liTag = document.createElement("li");
+	liTag.setAttribute("class", klass);
+	liTag.innerText = text;
+	parent.appendChild(liTag);
+
+	return liTag;
+};
+
+var appendP = function(parent, klass, text) {
+	var pTag = document.createElement("p");
+	pTag.setAttribute("class", klass);
+	pTag.innerText = text;
+	parent.appendChild(pTag);
+
+	return pTag;
+};
+
+var appendBtn = function(parent, klass, text) {
+	var bTag = document.createElement("button");
+	bTag.setAttribute("class", klass);
+	bTag.innerText = text;
+	parent.appendChild(bTag);
+
+	return bTag;
+};
+
+function showAll(parent, obj) {
+	parent.innerHTML = "";
+
+	for(var i=0; i < obj.length; i++) {
+		var li = appendLi(parent, "each clearfix", "");
+		appendP(li, "id"   , obj[i]["id"]);
+		appendP(li, "title", obj[i]["title"]);
+		appendP(li, "category", obj[i]["category"]);
+		appendP(li, "contents", obj[i]["contents"]);
+
+		var editBtn  = appendBtn(li, "", "編集");
+		editBtn.setAttribute("data-id", obj[i]["id"]);
+		editBtn.addEventListener("click", function() {
+			var c = document.getElementById("category"),
+				t = document.getElementById("title"),
+				con = document.getElementById("contents");
+
+			var data = {
+				category : c.value,
+				title    : t.value,
+				body : con.value
+			};
+
+			utilajax.change(this.getAttribute("data-id"), data);
+
+		}, false);
+
+		var delBtn = appendBtn(li, "", "削除");
+		delBtn.setAttribute("data-id", obj[i]["id"]);
+		delBtn.addEventListener("click", function() {
+			console.log(this.getAttribute("data-id"));
+			utilajax.del(this.getAttribute("data-id"));
+		}, false);		
+	};
+
+};
+
 document.addEventListener("DOMContentLoaded", function() {
 
-	//var memo = new Memo("タイトル", "内容", "カテゴリ");
+	var ajaxout  = document.getElementById("ajaxout");
+	var modelout = document.getElementById("modelout");
+
+	/* ボタン */
+	var addBtn  = document.getElementById("add");
+	var getBtn  = document.getElementById("get");
+	var saveBtn = document.getElementById("save");
+
+	/****************************************/
+
 	var memo = new Memo();
-	var memoh = new MemoHolder("タイトル", "内容", "カテゴリ");
-/*
-	console.log(memo);
-	console.log(memo.getAll());
+	var memoh = new MemoHolder();
 
-	memo.changeTitle("hoge");
-	memo.changeContents("foo");
-	memo.changeCategory("hogegeho");
+	//utilajax.getAll(memoh.register);
+	//utilajax.getSingle(82);
 
-	console.log(memo.getAll());
+	//utilajax.create(data, memo.register);
 
-	var params = utilajax.setParams({category: "hoge", title: "foo", body: "foofoo"});
-	console.log(params);
-*/
+	//utilajax.del(65);
 
-/*
-	utilajax.getAll(memo.register);
-	console.log(memo);
-	setTimeout(function() {
-		console.log(memo);
-	}, 5000);
-*/
+	/****************************************/
 
-	utilajax.getAll(memoh.register);	
-	console.log(memoh);	
-	setTimeout(function() {
-		console.log(memoh);
-	}, 5000);
+	get.addEventListener("click", function() {
+		//ここ（コントローラ）でモデルとビューの動作をコールバックで指定する。
+		//bindする。
+		var callbacks = [];
+
+		callbacks.push(memoh.register);
+		utilajax.getAll(callbacks[0]);
+
+		showAll(ajaxout, memoh.memos);
+
+	}, false);
+
+	add.addEventListener("click", function() {
+
+		console.log("追加");
+		var c = document.getElementById("category"),
+			t = document.getElementById("title"),
+			con = document.getElementById("contents");
+
+		var data = {
+			category : c.value,
+			title    : t.value,
+			body : con.value
+		};
+
+		utilajax.create(data);
+
+	}, false);	
 
 }, false);
+
+
+
+})(window);
+
+
 </script>
 
 </head>
@@ -121,43 +228,36 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <h3>utilAjaxのテスト</h3>
 <br>
-<ul>
-	<li class="each clearfix">
+<ul id="ajaxout">
+	<!--li class="each clearfix">
 		<p class="title">メモタイトル</p>
 		<p class="contents">メモ内容</p>
 		<button class="edit">編集</button>
 		<button class="remove">メモ削除</button>
-	</li>
-	<li class="each clearfix">
-		<p class="title">メモタイトル</p>
-		<p class="contents">メモ内容</p>
-		<button class="edit">編集</button>
-		<button class="remove">メモ削除</button>
-	</li>
+	</li-->
 </ul>
 
 <div id="control">
 	<button id="add">新規メモ作成</button>
 
 	<button id="get">サーバから取得</button>
-	<button id="store">サーバに保存</button>
 </div>
 
 <!--
 	model
 -->
-<div id="model">
+<div id="modelout">
 	<h3>Modelのテスト</h3>
-	<h6>status</h6>
-	<p id="status">なにもしてない</p>
 
 	<h6>タイトル</h6>
-	<input id="title" type="text" maxlength="20"><br>
+	<input id="title" type="text" maxlength="20" value="edited Title"><br>
+
+	<h6>カテゴリ</h6>
+	<input id="category" type="text" maxlength="20" value="edited Category"><br>
 
 	<h6>内容</h6>
-	<textarea id="contents" cols="50" rows="10" value"aaa"></textarea>
+	<textarea id="contents" cols="50" rows="10" value="edited body">edited body</textarea>
 	<br>
-	<button id="finish">編集終了</button>
 </div>
 
 </body>
