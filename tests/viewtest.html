@@ -23,20 +23,22 @@ window.addEventListener("DOMContentLoaded", function() {
 
 	setTimeout(function() { window.scrollTo(0,1); }, 1);
 
-	var memolist = new ViewHolder();
-	memolist.init("memo-list");
-	memolist.initEvent();
-	console.log(memolist);
-
-	var pages = new Pages();
-	pages.init("pages");
-	pages.initEvent();
+	var pages = new Pages("pages");
 	pages.move(1);
+
+	document.getElementById("slide").addEventListener("click", function() {
+		pages.move();
+	}, false);
+
+
+	/**************************************/
+
+	var memolist = new MemoTitleListView("memo-list");
 
 	var memos = [];
 	for(var i=0; i < 10; i++) {
 		var m = new MemoTitleView();
-		m.create();
+		m.create("test222");
 		m.initEvent();
 		memolist.list.push(m);
 	};
@@ -47,29 +49,11 @@ window.addEventListener("DOMContentLoaded", function() {
 		memolist.renderAsList();
 	}, false);
 
-	var pages = document.getElementById("pages");
-
-	//pages.className = "slideToRight";
-	/*
-	var isFrag = true;
-	document.getElementById("slide").addEventListener("click", function() {
-		console.log(pages);
-		if(!isFrag) {
-			pages.className = "slideToRight";
-		} else {
-			pages.className = "slideToLeft";
-		};
-		isFrag = !isFrag;
-	}, false);
-	*/
+	
 	/*********input*********/
-	var title_edit = new inputTextView();
-	title_edit.init("memo-title", "memo-title-input");
-	title_edit.initEvent();
+	var title_edit = new inputTextView("memo-title", "memo-title-input");
 
-	var title_body = new inputTextView();
-	title_body.init("memo-body", "memo-body-input");
-	title_body.initEvent();
+	var title_body = new inputTextView("memo-body", "memo-body-input");
 
 
 }, false);

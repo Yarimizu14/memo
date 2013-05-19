@@ -50,7 +50,7 @@ Memo.prototype.getContents = function() {
 Memo.prototype.getCategory = function() {
 	return this.category;
 };
-Memo.prototype.getCategory = function() {
+Memo.prototype.getDate = function() {
 	return {
 		created: this.created,
 		modified: this.modified

@@ -16,10 +16,14 @@ View.prototype = {
 };
 
 /**********************/
-var ViewHolder = function() { };
-ViewHolder.prototype = new View();
-ViewHolder.prototype.list = [];
-ViewHolder.prototype.initEvent = function() {
+var MemoTitleListView = function(id) {
+	this.init(id);
+	this.initEvent();
+};
+
+MemoTitleListView.prototype = new View();
+MemoTitleListView.prototype.list = [];
+MemoTitleListView.prototype.initEvent = function() {
 	var self = this;
 
 	this._handlers["click"] = function(e) {
@@ -32,26 +36,28 @@ ViewHolder.prototype.initEvent = function() {
 	this._el.addEventListener("touchstart", this._handlers["click"], false);
 };
 
-ViewHolder.prototype.appendToList = function(ViewList) {
+MemoTitleListView.prototype.appendToList = function(modelList) {
 	this._el.innerHTML = "";
 	var fragment = document.createDocumentFragment();
-	for(var i=0; i < ViewList.length; i++) {
-		fragment.appendChild(ViewList[i]._el);
+	for(var i=0; i < modelList.length; i++) {
+		var m = new MemoTitleView();
+		fragment.appendChild(m.create(modelList[i].id, modelList[i].title));
+		this.list.push(m);
 	};
 	this._el.appendChild(fragment);
 };
-ViewHolder.prototype.renderAsList = function() {
+MemoTitleListView.prototype.renderAsList = function() {
 	this._el.innerHTML = "";
 	var fragment = document.createDocumentFragment();
+	console.log(this.list);
 	for(var i=0; i < this.list.length; i++) {
-		this.list[i].setId(i);
 		this.list[i].render();
 		fragment.appendChild(this.list[i]._el);
 	};
 	this._el.appendChild(fragment);	
 };
-ViewHolder.prototype.renderAsMemo = function() {};
-ViewHolder.prototype.del = function() {
+MemoTitleListView.prototype.renderAsMemo = function() {};
+MemoTitleListView.prototype.del = function() {
 	var arr = [], tmp;
 
 	while((tmp = this.list.pop()) !== undefined && tmp !== null) {
@@ -59,7 +65,21 @@ ViewHolder.prototype.del = function() {
 	};
 	this.list = arr;
 };
-ViewHolder.prototype.focus = function(id) {
+MemoTitleListView.prototype.findActiveId = function() {
+	var arr = [], tmp, active_id = null;
+
+	while((tmp = this.list.pop()) !== undefined && tmp !== null) {
+		if (tmp._active) {
+			active_id = tmp.getId();
+			console.log(tmp);
+		} else {
+			arr.push(tmp);
+		};
+	};
+	this.list = arr;
+	return active_id;
+};
+MemoTitleListView.prototype.focus = function(id) {
 	var isFlag = false;
 	for (var i=0; i < this.list.length; i++) {
 		if(!isFlag && this.list[i].getId() === id) {
@@ -72,7 +92,55 @@ ViewHolder.prototype.focus = function(id) {
 };
 
 /**********************/
-var inputTextView = function() {};
+var MemoTitleView = function() { };
+MemoTitleView.prototype = new View();
+MemoTitleView.prototype._active = false;
+MemoTitleView.prototype.initEvent = function() {
+	/*
+	var self = this;
+
+	this._handlers["click"] = function() {
+		self._active = !self._active;
+		self.render();
+		console.log(self._active);
+	};
+	
+	this._el.addEventListener("click", this._handlers["click"], false);
+	*/
+};
+MemoTitleView.prototype.create = function(id, title) {
+	this._el = document.createElement("li");
+	this._el.setAttribute("class", "memo-title");
+	this._el.innerText = title;
+
+	this.setId(id);
+	this.render();
+	return this._el;
+};
+MemoTitleView.prototype.render = function() {
+	if(this._active) {		
+		this._el.style.backgroundColor = "#AABBDD";
+		this._el.style.color = "red";
+	} else {
+		this._el.style.backgroundColor = "";
+		this._el.style.color = "black";
+	};
+	return this._el;
+};
+MemoTitleView.prototype.setId = function(id) {
+	this._el.setAttribute("data-num", id);
+}
+MemoTitleView.prototype.getId = function() {
+	return this._el.getAttribute("data-num");
+}
+
+/**********************/
+
+var inputTextView = function(id, inputId) {
+	this.init(id, inputId);
+	this.initEvent();
+};
+
 inputTextView.prototype = new View();
 inputTextView.prototype._inputEl = null;
 inputTextView.prototype.init = function(id, inputId) {
@@ -98,6 +166,7 @@ inputTextView.prototype.initEvent = function() {
 	};
 
 	this._el.addEventListener("click", this._handlers["click"], false);
+	this._el.addEventListener("touchstart", this._handlers["click"], false);
 	this._inputEl.addEventListener("blur", this._handlers["blur"], false);
 };
 inputTextView.prototype.replace = function(replaceEl, targetEl) {
@@ -114,51 +183,11 @@ inputTextView.prototype.validate = function(txt) {
 }
 
 /**********************/
-var MemoTitleView = function() { };
-MemoTitleView.prototype = new View();
-MemoTitleView.prototype._active = false;
-MemoTitleView.prototype.initEvent = function() {
-	/*
-	var self = this;
-
-	this._handlers["click"] = function() {
-		self._active = !self._active;
-		self.render();
-		console.log(self._active);
-	};
-	
-	this._el.addEventListener("click", this._handlers["click"], false);
-	*/
-};
-MemoTitleView.prototype.create = function() {
-	this._el = document.createElement("li");
-	this._el.setAttribute("class", "memo-title");
-	this._el.innerText = "test";
-	this.render();
-	return this._el;
-};
-MemoTitleView.prototype.render = function() {
-	if(this._active) {		
-		this._el.style.backgroundColor = "#AABBDD";
-		this._el.style.color = "red";
-	} else {
-		this._el.style.backgroundColor = "";
-		this._el.style.color = "black";
-	};
-	return this._el;
-};
-MemoTitleView.prototype.setId = function(id) {
-	this._el.setAttribute("data-num", id);
-}
-MemoTitleView.prototype.getId = function() {
-	return this._el.getAttribute("data-num");
-}
-
-/**********************/
 
 w.View = View;
-w.ViewHolder = ViewHolder;
-w.inputTextView = inputTextView;
+
 w.MemoTitleView = MemoTitleView;
+w.MemoTitleListView = MemoTitleListView;
+w.inputTextView = inputTextView;
 
 })(window);

@@ -2,16 +2,110 @@
 <html lang="ja">
 
 <head>
-<meta charset="UTF-8">
 
-<style>
-</style>
+<title>メモ帳</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />  
+<link rel="icon" href="favicon.ico" />
 
-<script type="text/javascript"></script>
+<link rel="stylesheet" href="./css/reset.css" type="text/css" />
+<link rel="stylesheet" href="./css/main.css" type="text/css" />
+<link rel="stylesheet" href="./css/main_rotated.css" type="text/css" />
+<link rel="stylesheet" href="./css/page.css" type="text/css" />
+
+<script type="text/javascript" src="./js/model.js"></script>
+<script type="text/javascript" src="./js/utilajax.js"></script>
+<script type="text/javascript" src="./js/view.js"></script>
+<script type="text/javascript" src="./js/pages.js"></script>
+<script type="text/javascript" >
+
+window.addEventListener("DOMContentLoaded", function() {
+
+	setTimeout(function() { window.scrollTo(0,1); }, 1);
+
+	var pages = new Pages("pages");
+
+	var memoh = new MemoHolder();
+
+	var memolist = new MemoTitleListView("memo-list");
+
+	var clb = function(res) {
+		memoh.register(res);
+		memolist.appendToList(memoh.list);
+	};
+	utilajax.getAll(clb);
+
+	var title_edit = new inputTextView("memo-title", "memo-title-input");
+	var title_body = new inputTextView("memo-body", "memo-body-input");
+
+	pages.move(1);
+
+	document.getElementById("slide").addEventListener("click", function() {
+		pages.move();
+	}, false);
+
+
+
+	var del_clb = function(res) {
+		utilajax.getAll(clb);
+	};
+
+	document.getElementById("del").addEventListener("click", function() {
+		var id = memolist.findActiveId();
+		utilajax.del(id, del_clb);
+	}, false);
+
+	document.getElementById("edit-comp").addEventListener("click", function() {
+		
+	}, false);
+
+}, false);
+
+
+</script>
 
 </head>
 
 <body>
+
+<div id="pages">
+
+<div id="pages">
+	<article id="all">
+		<ul id="memo-list">
+			<li>テスト</li>
+		</ul>
+	</article>
+
+	<article id="single">
+		<div id="memo-title">Memo Title</div>
+		<input type="text" id="memo-title-input" maxlength="30">
+		<div class="line"></div>
+
+		<p id="memo-body">
+			aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+		</p>
+		<textarea id="memo-body-input" rows="5">iiiiiiiiiiiiiiiiiiiiiiii</textarea>
+	</article>
+</div>
+
+<div id="title-bar"></div>
+<div id="menu-bar">
+	<button id="new">新規作成</button>
+
+	<button id="del">削除</button>
+	<button id="edit">編集</button>
+	<button id="edit-comp">編集完了</button>
+
+	<button id="slide">スライド</button>
+</div>
+
+</div>
+
+
+
+
+
 </body>
 
 </html>
