@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+
+<title>メモ帳</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />  
+<link rel="icon" href="favicon.ico" />
+
+<link rel="stylesheet" href="reset.css" type="text/css" />
+<link rel="stylesheet" href="main.css" type="text/css" />
+<link rel="stylesheet" href="main_rotated.css" type="text/css" />
+<link rel="stylesheet" href="page.css" type="text/css" />
+
+<script type="text/javascript" src="../js/model.js"></script>
+<script type="text/javascript" src="../js/utilajax.js"></script>
+<script type="text/javascript" src="../js/view.js"></script>
+<script type="text/javascript" >
+
+window.addEventListener("DOMContentLoaded", function() {
+
+	setTimeout(function() { window.scrollTo(0,1); }, 1);
+
+	var memolist = new ViewHolder();
+	memolist.init("memo-list");
+	memolist.initEvent();
+	console.log(memolist);
+
+	var memos = [];
+	for(var i=0; i < 10; i++) {
+		var m = new MemoTitleView();
+		m.create();
+		m.initEvent();
+		memolist.list.push(m);
+	};
+	memolist.renderAsList();
+
+	document.getElementById("del").addEventListener("click", function() {
+		memolist.del();
+		memolist.renderAsList();
+	}, false);
+
+	var wrapper = document.getElementById("pages");
+	var isFrag = false;
+	document.getElementById("slide").addEventListener("click", function() {
+		console.log(wrapper);
+		if(!isFrag) {
+			wrapper.className = "slideToRight";
+		} else {
+			wrapper.className = "slideToLeft";
+		};
+		isFrag = !isFrag;
+
+	}, false);
+
+}, false);
+
+
+</script>
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<div id="pages">
+	<article id="all">
+		<ul id="memo-list">
+			<li>テスト</li>
+		</ul>
+	</article>
+
+	<article id="single">
+		<ul>
+			<li>テスト</li>
+		</ul>
+	</article>
+</div>
+
+<div id="title-bar"></div>
+<div id="menu-bar">
+	<button id="del">削除</button>
+	<button id="slide">スライド</button>
+</div>
+
+</div>
+
+
+
+
+
+</body>
+
+</html>

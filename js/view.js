@@ -21,6 +21,7 @@ ViewHolder.prototype = new View();
 ViewHolder.prototype.list = [];
 ViewHolder.prototype.initEvent = function() {
 	var self = this;
+
 	this._handlers["click"] = function(e) {
 		var memo_id = e.target.getAttribute("data-num");
 		self.focus(memo_id);
@@ -28,6 +29,7 @@ ViewHolder.prototype.initEvent = function() {
 	};
 
 	this._el.addEventListener("click", this._handlers["click"], false);
+	this._el.addEventListener("touchstart", this._handlers["click"], false);
 };
 ViewHolder.prototype.appendToList = function(ViewList) {
 	this._el.innerHTML = "";

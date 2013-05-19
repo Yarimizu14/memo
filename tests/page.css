@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+ul#memo-list {
+	width: 90%;
+	margin: 10px auto 0;
+}
+
+ul#memo-list > li.memo-title {
+	list-style: none;
+	border-bottom: dotted 1px black;
+
+	height: 30px;
+	width: 100%;
+	line-height: 30px;
+}
+
+/***********************************/
