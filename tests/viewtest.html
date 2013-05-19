@@ -16,6 +16,7 @@
 <script type="text/javascript" src="../js/model.js"></script>
 <script type="text/javascript" src="../js/utilajax.js"></script>
 <script type="text/javascript" src="../js/view.js"></script>
+<script type="text/javascript" src="../js/pages.js"></script>
 <script type="text/javascript" >
 
 window.addEventListener("DOMContentLoaded", function() {
@@ -26,6 +27,11 @@ window.addEventListener("DOMContentLoaded", function() {
 	memolist.init("memo-list");
 	memolist.initEvent();
 	console.log(memolist);
+
+	var pages = new Pages();
+	pages.init("pages");
+	pages.initEvent();
+	pages.move(1);
 
 	var memos = [];
 	for(var i=0; i < 10; i++) {
@@ -41,18 +47,30 @@ window.addEventListener("DOMContentLoaded", function() {
 		memolist.renderAsList();
 	}, false);
 
-	var wrapper = document.getElementById("pages");
-	var isFrag = false;
+	var pages = document.getElementById("pages");
+
+	//pages.className = "slideToRight";
+	/*
+	var isFrag = true;
 	document.getElementById("slide").addEventListener("click", function() {
-		console.log(wrapper);
+		console.log(pages);
 		if(!isFrag) {
-			wrapper.className = "slideToRight";
+			pages.className = "slideToRight";
 		} else {
-			wrapper.className = "slideToLeft";
+			pages.className = "slideToLeft";
 		};
 		isFrag = !isFrag;
-
 	}, false);
+	*/
+	/*********input*********/
+	var title_edit = new inputTextView();
+	title_edit.init("memo-title", "memo-title-input");
+	title_edit.initEvent();
+
+	var title_body = new inputTextView();
+	title_body.init("memo-body", "memo-body-input");
+	title_body.initEvent();
+
 
 }, false);
 
@@ -63,7 +81,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
 <body>
 
-<div id="wrapper">
+<div id="pages">
 
 <div id="pages">
 	<article id="all">
@@ -73,9 +91,14 @@ window.addEventListener("DOMContentLoaded", function() {
 	</article>
 
 	<article id="single">
-		<ul>
-			<li>テスト</li>
-		</ul>
+		<div id="memo-title">Memo Title</div>
+		<input type="text" id="memo-title-input" maxlength="30">
+		<div class="line"></div>
+
+		<p id="memo-body">
+			aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+		</p>
+		<textarea id="memo-body-input" rows="5">iiiiiiiiiiiiiiiiiiiiiiii</textarea>
 	</article>
 </div>
 

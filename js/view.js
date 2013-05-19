@@ -31,6 +31,7 @@ ViewHolder.prototype.initEvent = function() {
 	this._el.addEventListener("click", this._handlers["click"], false);
 	this._el.addEventListener("touchstart", this._handlers["click"], false);
 };
+
 ViewHolder.prototype.appendToList = function(ViewList) {
 	this._el.innerHTML = "";
 	var fragment = document.createDocumentFragment();
@@ -64,12 +65,53 @@ ViewHolder.prototype.focus = function(id) {
 		if(!isFlag && this.list[i].getId() === id) {
 			this.list[i]._active = true;
 			isFlag = true;
-			console.log(this.list[i].getId());
 		} else {
 			this.list[i]._active = false;
 		};
 	};
 };
+
+/**********************/
+var inputTextView = function() {};
+inputTextView.prototype = new View();
+inputTextView.prototype._inputEl = null;
+inputTextView.prototype.init = function(id, inputId) {
+	this._el = document.getElementById(id);
+	this._inputEl = document.getElementById(inputId);
+	return this._el;
+};
+inputTextView.prototype.initEvent = function() {
+	var self = this;
+
+	this._handlers["click"] = function(e) {
+		self._inputEl.value = self._el.innerText;
+		self.replace(self._inputEl, self._el);
+	};
+
+	this._handlers["blur"] = function(e) {
+		if(self.validate(self._inputEl.value)) {
+			self._el.innerText = self._inputEl.value;
+			self.replace(self._el, self._inputEl);
+		} else {
+			alert("入力が正しくありません。");
+		};
+	};
+
+	this._el.addEventListener("click", this._handlers["click"], false);
+	this._inputEl.addEventListener("blur", this._handlers["blur"], false);
+};
+inputTextView.prototype.replace = function(replaceEl, targetEl) {
+	replaceEl.style.display = "block";
+	targetEl.parentNode.insertBefore(replaceEl, targetEl);
+	targetEl.style.display = "none";
+};
+inputTextView.prototype.validate = function(txt) {
+	//(txt.length <= 0) return false : return true;
+	if(txt.length <= 0) {
+		return false;
+	};
+	return true;
+}
 
 /**********************/
 var MemoTitleView = function() { };
@@ -103,6 +145,7 @@ MemoTitleView.prototype.render = function() {
 		this._el.style.backgroundColor = "";
 		this._el.style.color = "black";
 	};
+	return this._el;
 };
 MemoTitleView.prototype.setId = function(id) {
 	this._el.setAttribute("data-num", id);
@@ -115,6 +158,7 @@ MemoTitleView.prototype.getId = function() {
 
 w.View = View;
 w.ViewHolder = ViewHolder;
+w.inputTextView = inputTextView;
 w.MemoTitleView = MemoTitleView;
 
 })(window);
